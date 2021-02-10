@@ -30,7 +30,7 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
     let itemCount: Int
     var swipingToDismiss: SwipeToDismiss?
     fileprivate var isAnimating = false
-    fileprivate var fetchImageBlock: FetchImageBlock
+    fileprivate var fetchImageBlock: FetchImageBlock?
 
     //CONFIGURATION
     fileprivate var presentationStyle = GalleryPresentationStyle.displacement
@@ -62,7 +62,7 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
     // MARK: - Initializers
 
-    public init(index: Int, itemCount: Int, fetchImageBlock: @escaping FetchImageBlock, configuration: GalleryConfiguration, isInitialController: Bool = false) {
+    public init(index: Int, itemCount: Int, fetchImageBlock: FetchImageBlock?, configuration: GalleryConfiguration, isInitialController: Bool = false) {
 
         self.index = index
         self.itemCount = itemCount
@@ -197,19 +197,18 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
     public func fetchImage() {
 
-        fetchImageBlock { [weak self] image in
-
-            if let image = image {
-
-                DispatchQueue.main.async {
-                    self?.activityIndicatorView.stopAnimating()
-
+        fetchImageBlock? { [weak self] image in
+            
+            DispatchQueue.main.async {
+                self?.activityIndicatorView.stopAnimating()
+                
+                if let image = image {
                     var itemView = self?.itemView
                     itemView?.image = image
                     itemView?.isAccessibilityElement = image.isAccessibilityElement
                     itemView?.accessibilityLabel = image.accessibilityLabel
                     itemView?.accessibilityTraits = image.accessibilityTraits
-
+                    
                     self?.view.setNeedsLayout()
                     self?.view.layoutIfNeeded()
                 }

@@ -108,7 +108,7 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
 
         case .image(let fetchImageBlock):
 
-            fetchImageBlock() { image in
+            fetchImageBlock?() { image in
 
                 if let image = image {
 
@@ -118,7 +118,7 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
 
         case .video(let fetchImageBlock, _):
 
-            fetchImageBlock() { image in
+            fetchImageBlock?() { image in
 
                 if let image = image {
 
@@ -128,7 +128,7 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
 
         case .custom(let fetchImageBlock, _):
 
-            fetchImageBlock() { image in
+            fetchImageBlock?() { image in
 
                 if let image = image {
 
