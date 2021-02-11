@@ -18,6 +18,8 @@ open class VideoScrubber: UIControl {
     let scrubber = Slider.createSlider(320, height: 20, pointerDiameter: 10, barHeight: 2)
     let timeLabel = UILabel(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 50, height: 20)))
     var duration: TimeInterval?
+    var isDidPlayToEndTime: Bool = false
+    
     fileprivate var periodicObserver: AnyObject?
     fileprivate var stoppedSlidingTimeStamp = Date()
     
@@ -100,10 +102,9 @@ open class VideoScrubber: UIControl {
     }
 
     @objc func didEndPlaying() {
-
-        self.playButton.isHidden = true
-        self.pauseButton.isHidden = true
-        self.replayButton.isHidden = false
+        
+        self.isDidPlayToEndTime = true
+        self.update()
     }
 
     func setup() {
@@ -167,12 +168,14 @@ open class VideoScrubber: UIControl {
     @objc func play() {
 
         self.player?.play()
+        self.isDidPlayToEndTime = false
     }
 
     @objc func replay() {
 
         self.player?.seek(to: CMTime(value:0 , timescale: 1))
         self.player?.play()
+        self.isDidPlayToEndTime = false
     }
 
     @objc func pause() {
@@ -200,12 +203,11 @@ open class VideoScrubber: UIControl {
     }
 
     func updateButtons() {
-
         if let player = self.player {
 
-            self.playButton.isHidden = player.isPlaying()
-            self.pauseButton.isHidden = !self.playButton.isHidden
-            self.replayButton.isHidden = true
+            self.playButton.isHidden = player.isPlaying() || isDidPlayToEndTime
+            self.pauseButton.isHidden = !self.playButton.isHidden || isDidPlayToEndTime
+            self.replayButton.isHidden = !isDidPlayToEndTime
         }
     }
 
@@ -230,12 +232,9 @@ open class VideoScrubber: UIControl {
 
             let progress = player.currentTime().seconds / duration
 
-            UIView.animate(withDuration: 0.9, animations: { [weak self] in
-
-                if let strongSelf = self {
-
-                    strongSelf.scrubber.value = Float(progress) * strongSelf.scrubber.maximumValue
-                }
+            UIView.animate(withDuration: 0.2, animations: {
+                
+                self.scrubber.value = self.isDidPlayToEndTime ? self.scrubber.maximumValue : Float(progress) * self.scrubber.maximumValue
             })
         }
     }
