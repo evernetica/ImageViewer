@@ -160,7 +160,8 @@ open class VideoScrubber: UIControl {
         }
 
         else if keyPath == "rate" || keyPath == "status" {
-
+            
+            if player?.rate == 1 { self.isDidPlayToEndTime = false }
             self.update()
         }
     }
@@ -168,14 +169,12 @@ open class VideoScrubber: UIControl {
     @objc func play() {
 
         self.player?.play()
-        self.isDidPlayToEndTime = false
     }
 
     @objc func replay() {
 
-        self.player?.seek(to: CMTime(value:0 , timescale: 1))
+        self.player?.seek(to: .zero)
         self.player?.play()
-        self.isDidPlayToEndTime = false
     }
 
     @objc func pause() {
