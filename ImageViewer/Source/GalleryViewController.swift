@@ -417,8 +417,11 @@ open class GalleryViewController: UIPageViewController, ItemControllerDelegate {
     }
 
     fileprivate func layoutScrubber() {
-
-        scrubber.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.bounds.width, height: 40))
+        let isPortrait = self.view.bounds.width < self.view.bounds.height
+        let width = isPortrait ? self.view.bounds.width : self.view.bounds.width - defaultInsets.top - defaultInsets.bottom
+        
+        let size = CGSize(width: width, height: 40)
+        scrubber.bounds = CGRect(origin: .zero, size: size)
         scrubber.center = self.view.boundsCenter
         scrubber.frame.origin.y = (footerView?.frame.origin.y ?? self.view.bounds.maxY) - scrubber.bounds.height
     }
