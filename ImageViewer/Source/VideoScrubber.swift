@@ -34,7 +34,7 @@ open class VideoScrubber: UIControl {
         return attributes
     }
 
-    weak var player: AVPlayer? {
+    public weak var player: AVPlayer? {
 
         willSet {
             if let player = player {
