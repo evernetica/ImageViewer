@@ -27,12 +27,18 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
     //STATE
     public let index: Int
     public var isInitialController = false
+
     let itemCount: Int
     var swipingToDismiss: SwipeToDismiss?
     fileprivate var isAnimating = false
     fileprivate var fetchImageBlock: FetchImageBlock?
 
     //CONFIGURATION
+    public var maximumZoomScale: CGFloat = 8 {
+        didSet {
+            debugPrint("maximumZoomScale", String(describing: self), maximumZoomScale)
+        }
+    }
     fileprivate var presentationStyle = GalleryPresentationStyle.displacement
     fileprivate var doubleTapToZoomDuration = 0.15
     fileprivate var displacementDuration: TimeInterval = 0.55
@@ -41,7 +47,6 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
     fileprivate var displacementTimingCurve: UIView.AnimationCurve = .linear
     fileprivate var displacementSpringBounce: CGFloat = 0.7
     fileprivate let minimumZoomScale: CGFloat = 1
-    fileprivate var maximumZoomScale: CGFloat = 8
     fileprivate var pagingMode: GalleryPagingMode = .standard
     fileprivate var thresholdVelocity: CGFloat = 500 // The speed of swipe needs to be at least this amount of pixels per second for the swipe to finish dismissal.
     fileprivate var displacementKeepOriginalInPlace = false
@@ -103,15 +108,9 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
         }
 
         super.init(nibName: nil, bundle: nil)
-
+        
         self.modalPresentationStyle = .custom
-
         self.itemView.isHidden = isInitialController
-
-        configureScrollView()
-        configureGestureRecognizers()
-
-        activityIndicatorView.hidesWhenStopped = true
     }
 
     @available (*, unavailable)
@@ -189,10 +188,13 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        configureScrollView()
+        configureGestureRecognizers()
         createViewHierarchy()
-
         fetchImage()
+        
+        activityIndicatorView.hidesWhenStopped = true
     }
 
     public func fetchImage() {

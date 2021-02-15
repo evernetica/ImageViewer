@@ -118,6 +118,7 @@ class ViewController: UIViewController {
             GalleryConfigurationItem.videoControlsColor(.white),
 
             GalleryConfigurationItem.maximumZoomScale(8),
+            GalleryConfigurationItem.maximumVideoZoomScale(1),
             GalleryConfigurationItem.swipeToDismissThresholdVelocity(500),
 
             GalleryConfigurationItem.doubleTapToZoomDuration(0.15),

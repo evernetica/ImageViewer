@@ -33,6 +33,8 @@ class VideoViewController: ItemBaseController<VideoView> {
         self.scrubber = scrubber
         self.player = AVPlayer(url: self.videoURL)
         
+        super.init(index: index, itemCount: itemCount, fetchImageBlock: fetchImageBlock, configuration: configuration, isInitialController: isInitialController)
+        
         ///Only those options relevant to the paging VideoViewController are explicitly handled here, the rest is handled by ItemViewControllers
         for item in configuration {
             
@@ -40,12 +42,12 @@ class VideoViewController: ItemBaseController<VideoView> {
                 
             case .videoAutoPlay(let enabled):
                 autoPlayEnabled = enabled
-                
+            case .maximumVideoZoomScale(let scale):
+                maximumZoomScale = scale
             default: break
             }
         }
 
-        super.init(index: index, itemCount: itemCount, fetchImageBlock: fetchImageBlock, configuration: configuration, isInitialController: isInitialController)
     }
 
     override func viewDidLoad() {

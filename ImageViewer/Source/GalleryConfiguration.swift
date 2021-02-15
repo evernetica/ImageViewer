@@ -71,6 +71,9 @@ public enum GalleryConfigurationItem {
 
     ///Allows to set maximum magnification factor for the image
     case maximumZoomScale(CGFloat)
+    
+    ///Allows to set maximum magnification factor for the video
+    case maximumVideoZoomScale(CGFloat)
 
     ///Sets the duration of the animation when item is double tapped and transitions between ScaleToAspectFit & ScaleToAspectFill sizes.
     case doubleTapToZoomDuration(TimeInterval)
